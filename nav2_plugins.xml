@@ -1,0 +1,16 @@
+<class_libraries>
+    <library path="my_auto_nav_astar_lib">
+    <class name="my_auto_nav_pkg/AstarPlanner" type="astar_planner::AstarPlanner" base_class_type="nav2_core::GlobalPlanner">
+        <description>
+            custom A* global planner plugin for Nav2.
+        </description>
+    </class>
+</library>
+<library path="my_auto_nav_pure_pursuit_lib">
+    <class name="my_auto_nav_pkg/PurePursuitController" type="pure_pursuit::PurePursuit" base_class_type="nav2_core::Controller">
+        <description>
+            custom Pure Pursuit controller plugin for Nav2.
+        </description>
+    </class>
+</library>
+</class_libraries>
