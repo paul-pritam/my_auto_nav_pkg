@@ -2,11 +2,23 @@
 <root main_tree_to_execute="BehaviorTree">
     <!-- ////////// -->
     <BehaviorTree ID="BehaviorTree">
-        <Control ID="PipelineSequence">
-            <Decorator ID="RateController" hz="1">
-                <Action ID="ComputePathToPose" goal="{goal}" path="{path}" planner_id="GridBased" server_name="compute_path_to_pose" server_timeout="" start=""/>
-            </Decorator>
-            <Action ID="FollowPath" controller_id="FollowPath" goal_checker_id="" path="{path}" server_name="follow_path" server_timeout=""/>
+        <Control ID="RecoveryNode" number_of_retries="3">
+            <Control ID="PipelineSequence">
+                <Decorator ID="RateController" hz="1">
+                    <Action ID="ComputePathToPose" goal="{goal}" path="{path}" planner_id="GridBased" server_name="compute_path_to_pose" server_timeout="" start=""/>
+                </Decorator>
+                <Action ID="FollowPath" controller_id="FollowPath" goal_checker_id="" path="{path}" server_name="follow_path" server_timeout=""/>
+            </Control>
+            <Sequence>
+                <Action ID="Wait" server_name="wait" server_timeout="" wait_duration="2.0"/>
+                <Action ID="ClearEntireCostmap" server_timeout="" service_name="local_costmap/clear_entirely_local_costmap"/>
+                <ReactiveFallback>
+                    <Decorator ID="RateController" hz="1">
+                        <Action ID="ComputePathToPose" goal="{goal}" path="{path}" planner_id="GridBased" server_name="compute_path_to_pose" server_timeout="" start=""/>
+                    </Decorator>
+                    <Action ID="Spin" server_name="spin" server_timeout="" spin_dist="1.57" time_allowance=""/>
+                </ReactiveFallback>
+            </Sequence>
         </Control>
     </BehaviorTree>
     <!-- ////////// -->
