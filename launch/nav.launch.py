@@ -36,7 +36,7 @@ def generate_launch_description():
             os.path.join(my_nav_pkg_dir, "config", "controller_server.yaml"),
             {"use_sim_time": use_sim_time}
         ],
-        remappings=[('vel_pub', 'cmd_vel')]
+        remappings=[('vel_pub', '/bcr_bot/cmd_vel')]
     )
     
     nav2_planner_server = Node(

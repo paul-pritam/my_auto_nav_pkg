@@ -3,19 +3,18 @@
 
 #include <string>
 #include <memory>
+#include <vector>
+#include <queue>
 
 #include "rclcpp/rclcpp.hpp"
-#include "rclcpp_action/rclcpp_action.hpp"
 #include "geometry_msgs/msg/point.hpp"
 #include "geometry_msgs/msg/pose_stamped.hpp"
-
+#include "tf2_ros/buffer.h"
 #include "nav2_core/global_planner.hpp"
 #include "nav_msgs/msg/path.hpp"
 #include "nav2_util/robot_utils.hpp"
 #include "nav2_util/lifecycle_node.hpp"
 #include "nav2_costmap_2d/costmap_2d_ros.hpp"
-#include "nav2_msgs/action/smooth_path.hpp"
-
 
 namespace astar_planner{
     struct GraphNode{
@@ -60,7 +59,8 @@ namespace astar_planner{
 
             nav_msgs::msg::Path createPlan(
                 const geometry_msgs::msg::PoseStamped &start,
-                const geometry_msgs::msg::PoseStamped &goal
+                const geometry_msgs::msg::PoseStamped &goal,
+                std::function<bool()> cancel_checker
             )override;
         
         private:
@@ -70,12 +70,10 @@ namespace astar_planner{
             std::string global_frame_, name_;
             double interpolation_res_;
 
-            rclcpp_action::Client<nav2_msgs::action::SmoothPath>::SharedPtr smooth_client_;
             bool poseOnMap(const GraphNode &node);
             GraphNode world_to_grid(const geometry_msgs::msg::Pose &pose);
             geometry_msgs::msg::Pose grid_to_world(const GraphNode &node);
             double manhattan_dist(const GraphNode &present_node , const GraphNode &goal_node);
-
     };
 }
-#endif 
+#endif
