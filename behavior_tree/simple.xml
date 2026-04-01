@@ -1,17 +1,14 @@
 <?xml version="1.0"?>
 <root BTCPP_format="4" main_tree_to_execute="BehaviorTree">
-    <!-- ////////// -->
     <BehaviorTree ID="BehaviorTree">
         <Control ID="RecoveryNode" number_of_retries="3">
             <Control ID="PipelineSequence">
                 <Decorator ID="RateController" hz="1">
                     <Sequence>
                         <Action ID="ComputePathToPose" goal="{goal}" path="{path}" planner_id="GridBased" server_name="compute_path_to_pose" />
-                        <!-- SmoothPath added here -->
                         <Action ID="SmoothPath" unsmoothed_path="{path}" smoothed_path="{smoothed_path}" smoother_id="simple_smoother" check_for_collisions="false" max_smoothing_duration="10.0"/>
                     </Sequence>
                 </Decorator>
-                <!-- FollowPath now takes smoothed_path -->
                 <Action ID="FollowPath" controller_id="FollowPath" path="{smoothed_path}" server_name="follow_path"/>
             </Control>
             <Sequence>
@@ -21,7 +18,6 @@
                     <Decorator ID="RateController" hz="1">
                         <Sequence>
                             <Action ID="ComputePathToPose" goal="{goal}" path="{path}" planner_id="GridBased" server_name="compute_path_to_pose" />
-                            <!-- SmoothPath added to the recovery planning sequence as well -->
                             <Action ID="SmoothPath" unsmoothed_path="{path}" smoothed_path="{smoothed_path}" smoother_id="simple_smoother" check_for_collisions="false" max_smoothing_duration="10.0"/>
                         </Sequence>
                     </Decorator>
@@ -30,6 +26,4 @@
             </Sequence>
         </Control>
     </BehaviorTree>
-    <!-- ////////// -->
-    <!-- TreeNodesModel remains the same -->
 </root>
